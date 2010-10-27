@@ -93,7 +93,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>org.signaut.monty.start.Starter</mainClass>
+              <mainClass>org.signaut.camelback.start.Starter</mainClass>
             </manifest>
           </archive>
         </configuration>
