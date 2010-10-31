@@ -1,15 +1,13 @@
 package org.signaut.camelback.start;
 
-import java.io.File;
-
 import javax.servlet.ServletContext;
 
 import org.eclipse.jetty.deploy.DeploymentManager;
 import org.eclipse.jetty.security.Authenticator;
+import org.eclipse.jetty.security.Authenticator.AuthConfiguration;
 import org.eclipse.jetty.security.Authenticator.Factory;
 import org.eclipse.jetty.security.IdentityService;
 import org.eclipse.jetty.security.LoginService;
-import org.eclipse.jetty.security.Authenticator.AuthConfiguration;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.SessionManager;
@@ -29,17 +27,23 @@ import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
 import org.signaut.jetty.server.session.ClusterSessionIdManager;
 import org.signaut.jetty.server.session.ClusterSessionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.hazelcast.core.HazelcastInstance;
 
 class JettyInstance {
     private final CamelbackConfig config;
     private final Server server = new Server();;
     private final HazelcastFactory hazelcastFactory = new HazelcastFactory();;
-
+    private final Logger log = LoggerFactory.getLogger(getClass());
+    
     public JettyInstance(CamelbackConfig config) {
         this.config = config;
     }
 
     public void start() {
+        final long startingTime = System.currentTimeMillis();
         setConnectors(server);
 
         final HandlerCollection handlers = new HandlerCollection();
@@ -47,18 +51,21 @@ class JettyInstance {
         final Handler defaultHandler = new DefaultHandler();
         handlers.setHandlers(new Handler[] { contextHandlers, defaultHandler });
         server.setHandler(handlers);
-
+        
+        final HazelcastInstance hazelcastInstance = hazelcastFactory.loadHazelcastInstance(config.getHazelcastConfig(), getClass()); 
+        
         // Authentication
         final CouchDbLoginService couchDbLoginService = new CouchDbLoginService("couchdb_realm",
                 new CouchDbAuthenticatorImpl(config.getLoginConfig().getAuthenticationUrl()),
-                hazelcastFactory.loadHazelcastInstance(config.getLoginConfig().getClusterConfig(), getClass()));
+                hazelcastInstance);
+                
         server.addBean(couchDbLoginService);
         server.addBean(authenticatorFactory);
-
+        
         // Session manager
         final ClusterSessionIdManager clusterSessionIdManager = 
             new ClusterSessionIdManager(null,
-                                        hazelcastFactory.loadHazelcastInstance(config.getSessionManagerConfig().getSessionConfig(), getClass()));
+                                        hazelcastInstance);
         server.setSessionIdManager(clusterSessionIdManager);
         final SessionManagerProvider sessionManagerProvider = new SessionManagerProvider() {
             @Override
@@ -70,6 +77,7 @@ class JettyInstance {
         // Deployment handling
         final DeploymentManager deploymentManager = new DeploymentManager();
         deploymentManager.setContexts(contextHandlers);
+        server.addBean(deploymentManager);
         final CouchDeployerProperties couchDbProperties = new CouchDeployerProperties()
                 .setDatabaseUrl(config.getDeployerConfig().getDatabaseUrl())
                 .setUsername(config.getDeployerConfig().getUsername())
@@ -78,13 +86,15 @@ class JettyInstance {
                 .setFilter(config.getDeployerConfig().getFilter());
         deploymentManager.addAppProvider(new CouchDbAppProvider(couchDbProperties, 
                                                                 authenticatorFactory, 
-                                                                new File(config.getTempDirectory()), 
                                                                 sessionManagerProvider));
-        server.addBean(deploymentManager);
+        
 
+        server.setStopAtShutdown(true);
+        server.setGracefulShutdown(5000);
         // Now start server
         try {
             server.start();
+            log.info(String.format("Started camelback in %d milliseconds", System.currentTimeMillis()-startingTime));
         } catch (Exception e) {
             throw new IllegalStateException("While starting jetty", e);
         }

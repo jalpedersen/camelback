@@ -5,11 +5,11 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 public class CamelbackConfig {
 
     public static class DeployerConfig {
-        private String databaseUrl = "http://localhost:5984/messages";
-        private String username = "knownUser";
-        private String password = "myPassword";
-        private String filter = "messages/appfilter";
-        private String designDocument = "messages";
+        private String databaseUrl;
+        private String username;
+        private String password;
+        private String filter;
+        private String designDocument;
 
         public String getDatabaseUrl() {
             return databaseUrl;
@@ -56,7 +56,7 @@ public class CamelbackConfig {
     public static class LoginConfig {
         private String authenticationUrl = "http://localhost:5984/_session";
         // Hazelcast configuration file
-        private String clusterConfig = "properties/login-cluster.xml";
+        private String clusterConfig = null;
 
         public String getAuthenticationUrl() {
             return authenticationUrl;
@@ -78,7 +78,7 @@ public class CamelbackConfig {
 
     public static class SessionManagerConfig {
         // Hazelcast configuration file
-        private String sessionConfig = "properties/session-cluster.xml";
+        private String sessionConfig = "/properties/cluster.xml";
 
         public String getSessionConfig() {
             return sessionConfig;
@@ -124,6 +124,8 @@ public class CamelbackConfig {
     private String tempDirectory = "/tmp/";
 
     private SslConfig sslConfig;
+
+    private String hazelcastConfig = "/properties/cluster.xml";
 
     private LoginConfig loginConfig = new LoginConfig();
 
@@ -209,6 +211,14 @@ public class CamelbackConfig {
 
     public void setDeployerConfig(DeployerConfig deployerConfig) {
         this.deployerConfig = deployerConfig;
+    }
+
+    public String getHazelcastConfig() {
+        return hazelcastConfig;
+    }
+
+    public void setHazelcastConfig(String hazelcastConfig) {
+        this.hazelcastConfig = hazelcastConfig;
     }
 
     @JsonAnySetter
