@@ -1,0 +1,9 @@
+{
+  deployerConfig: {
+    databaseUrl: "http://localhost:5984/messages/",
+    username: "knownUser",
+    password: "myPassword",
+    filter: "messages/appfilter"
+  }
+
+}
