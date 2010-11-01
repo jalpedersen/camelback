@@ -1,58 +1,10 @@
 package org.signaut.camelback.configuration;
 
 import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.signaut.jetty.deploy.providers.couchdb.CouchDbDeployerProperties;
 
 public class CamelbackConfig {
-
-    public static class DeployerConfig {
-        private String databaseUrl;
-        private String username;
-        private String password;
-        private String filter;
-        private String designDocument;
-
-        public String getDatabaseUrl() {
-            return databaseUrl;
-        }
-
-        public void setDatabaseUrl(String databaseUrl) {
-            this.databaseUrl = databaseUrl;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getFilter() {
-            return filter;
-        }
-
-        public void setFilter(String filter) {
-            this.filter = filter;
-        }
-
-        public String getDesignDocument() {
-            return designDocument;
-        }
-
-        public void setDesignDocument(String designDocument) {
-            this.designDocument = designDocument;
-        }
-
-    }
-
+    
     public static class LoginConfig {
         private String authenticationUrl = "http://localhost:5984/_session";
         // Hazelcast configuration file
@@ -131,7 +83,7 @@ public class CamelbackConfig {
 
     private SessionManagerConfig sessionManagerConfig = new SessionManagerConfig();
 
-    private DeployerConfig deployerConfig = new DeployerConfig();
+    private CouchDbDeployerProperties deployerConfig = new CouchDbDeployerProperties();
 
     public String getName() {
         return name;
@@ -205,11 +157,11 @@ public class CamelbackConfig {
         this.sessionManagerConfig = sessionManagerConfig;
     }
 
-    public DeployerConfig getDeployerConfig() {
+    public CouchDbDeployerProperties getDeployerConfig() {
         return deployerConfig;
     }
 
-    public void setDeployerConfig(DeployerConfig deployerConfig) {
+    public void setDeployerConfig(CouchDbDeployerProperties deployerConfig) {
         this.deployerConfig = deployerConfig;
     }
 

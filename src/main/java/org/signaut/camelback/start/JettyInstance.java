@@ -22,7 +22,7 @@ import org.signaut.common.hazelcast.HazelcastFactory;
 import org.signaut.couchdb.impl.CouchDbAuthenticatorImpl;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.SessionManagerProvider;
-import org.signaut.jetty.deploy.providers.couchdb.CouchDeployerProperties;
+import org.signaut.jetty.deploy.providers.couchdb.CouchDbDeployerProperties;
 import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
 import org.signaut.jetty.server.session.ClusterSessionIdManager;
@@ -78,13 +78,7 @@ class JettyInstance {
         final DeploymentManager deploymentManager = new DeploymentManager();
         deploymentManager.setContexts(contextHandlers);
         server.addBean(deploymentManager);
-        final CouchDeployerProperties couchDbProperties = new CouchDeployerProperties()
-                .setDatabaseUrl(config.getDeployerConfig().getDatabaseUrl())
-                .setUsername(config.getDeployerConfig().getUsername())
-                .setPassword(config.getDeployerConfig().getPassword())
-                .setDesignDocument(config.getDeployerConfig().getDesignDocument())
-                .setFilter(config.getDeployerConfig().getFilter());
-        deploymentManager.addAppProvider(new CouchDbAppProvider(couchDbProperties, 
+        deploymentManager.addAppProvider(new CouchDbAppProvider(config.getDeployerConfig(), 
                                                                 authenticatorFactory, 
                                                                 sessionManagerProvider));
         
