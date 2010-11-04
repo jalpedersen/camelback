@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
 
+import org.apache.commons.cli.CommandLine;
 import org.signaut.camelback.configuration.CamelbackConfig;
 import org.signaut.camelback.configuration.ConfigurationLoader;
 
@@ -22,10 +23,24 @@ public class Starter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        final File configFile = new File("camelback.json");
-        final JettyInstance jettyInstance = new JettyInstance(
-                configurationLoader.loadJsonConfiguration(configFile, CamelbackConfig.class));
+        final CommandLine options = new CommandLineOptions().getOptions(args);
+        final CamelbackConfig config;
+        if (options.hasOption(CommandLineOptions.CONFIG_OPTION)) {
+            config = configurationLoader.loadJsonConfiguration(new File(options.getOptionValue(CommandLineOptions.CONFIG_OPTION)),
+                                                      CamelbackConfig.class);
+        } else {
+            config = configurationLoader.loadJsonConfiguration(new File("camelback.json"),
+                                                      CamelbackConfig.class);
+        }
+        if (options.hasOption(CommandLineOptions.PORT_OPTION)) {
+            config.setPort(Integer.parseInt(options.getOptionValue(CommandLineOptions.PORT_OPTION)));
+        }
+        if (options.hasOption(CommandLineOptions.SECURE_PORT_OPTION)) {
+            config.setSecurePort(Integer.parseInt(options.getOptionValue(CommandLineOptions.SECURE_PORT_OPTION)));
+        }
+        
+        final JettyInstance jettyInstance = new JettyInstance(config);
+                
         jettyInstance.start();
     }
 }

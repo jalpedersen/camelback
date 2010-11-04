@@ -22,7 +22,6 @@ import org.signaut.common.hazelcast.HazelcastFactory;
 import org.signaut.couchdb.impl.CouchDbAuthenticatorImpl;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.SessionManagerProvider;
-import org.signaut.jetty.deploy.providers.couchdb.CouchDbDeployerProperties;
 import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
 import org.signaut.jetty.server.session.ClusterSessionIdManager;
