@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>CouchDB SSO example</display-name>
+  <servlet>
+    <servlet-name>example</servlet-name>
+    <servlet-class>example.core</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>example</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- Security Settings -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Authenticated area</web-resource-name>
+      <url-pattern>/user/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>user</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>BASIC</auth-method>
+  </login-config>
+
+  <security-role>
+    <description>Administrator</description>
+    <role-name>admin</role-name>
+  </security-role>
+  <security-role>
+    <description>User</description>
+    <role-name>user</role-name>
+  </security-role>
+</web-app>
