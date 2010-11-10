@@ -35,3 +35,12 @@ Deploying example webapp:
 
  - Camelback will detect the change and deploy the war file automatically
 
+
+Usage 
+===== 
+
+Now your couchapps can access your java webapp through the
+"/_j/example/*" URI. The nifty thing is that the currently logged-in
+CouchDB user is mapped to a java.security.Principal object, including
+any roles the CouchDB user might have. This means that the webapp does
+not have to known anything about CouchDB.
