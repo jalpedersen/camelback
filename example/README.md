@@ -1,5 +1,21 @@
 Example clojure web app demonstrating the single-sign-on feature of
-jetty-couchdb
+jetty-couchdb.
+
+Here we use nginx as proxy - maybe the proposed proxy
+feature (https://github.com/davisp/couchdb/tree/new_externals) will
+make this redundant.
+
+The reason we need to mess around with proxies is to get around the
+same host, same port requirement of XmlHttp requests. Furthermore is
+the SSO based on the cookie set by CouchDB.
+
+
+In in all this means:
+- You can create web apps using CouchApp
+- But if your app require something that cannot be implemented in CouchDB,
+  you have the option to implement it as a Java web app (or clojure as in
+  this example).
+
 
 
 Setup:
