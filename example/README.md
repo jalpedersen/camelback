@@ -62,3 +62,11 @@ Now your couchapps can access your java webapp through the
 CouchDB user is mapped to a java.security.Principal object, including
 any roles the CouchDB user might have. This means that the webapp does
 not have to known anything about CouchDB.
+
+Try for instance to do this (couchdb_user is assumed to be a valid couchdb user):
+
+    curl valid_couchdb_user:password@localhost/_j/example/user/testing
+
+You should see something like this in response:
+
+    {"status":"validated","request":"couchdb_user"}
