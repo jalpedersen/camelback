@@ -7,7 +7,7 @@ make this redundant.
 
 The reason we need to mess around with proxies is to get around the
 same host, same port requirement of XmlHttp requests. Furthermore the
-SSO based on the cookie set by CouchDB.
+SSO is based on the cookie set by CouchDB.
 
 
 In in all this means:
