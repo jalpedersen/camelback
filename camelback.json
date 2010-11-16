@@ -4,6 +4,11 @@
     username: "knownUser",
     password: "myPassword",
     filter: "messages/appfilter"
+  },
+
+  sslConfig: {
+    keystore: "./etc/monty.jks",
+    keystorePassword: "tobechanged"
   }
 
 }
