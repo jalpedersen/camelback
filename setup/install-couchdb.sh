@@ -5,6 +5,8 @@ prefix=/opt/couchdb
 #dependencies
 apt-get install build-essential erlang xulrunner-dev libicu-dev help2man libcurl4-openssl-dev
 
+echo "/usr/lib/xulrunner-devel-$xulrunner_version/lib" > /etc/ld.so.conf.d/xulrunner.conf
+
 (\
 cd apache-couchdb-1.0.1 && \
 ./configure --prefix=$prefix --with-js-lib=/usr/lib/xulrunner-devel-$xulrunner_version/lib \
@@ -12,6 +14,7 @@ cd apache-couchdb-1.0.1 && \
 make && \
 sudo make install \
 ) &&\
+
 
 
 # Add couchdb user account
