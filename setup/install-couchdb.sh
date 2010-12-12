@@ -29,5 +29,7 @@ chmod 775 $prefix/etc/couchdb/*.d &&\
 #symlink init script
 ln -s $prefix/etc/init.d/couchdb /etc/init.d/ &&\
 
+sudo ln -s $prefix/etc/logrotate.d/couchdb /etc/logrotate.d/couchdb
+
 # Start couchdb on system start
 update-rc.d couchdb defaults 
