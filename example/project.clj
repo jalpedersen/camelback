@@ -5,6 +5,9 @@
 		 [compojure "0.5.2"]
 		 [ring/ring-core "0.3.3"]
 		 [ring/ring-servlet "0.3.3"]]
-  :dev-dependencies [[swank-clojure "1.2.1"]]
+  :dev-dependencies [[swank-clojure "1.2.1"]
+  		     [uk.org.alienscience/leiningen-war "0.0.12"]
+                     [ring/ring-jetty-adapter "0.3.5"]]
+  :war {:name "example.war"}
   :aot [example.core]
   )
