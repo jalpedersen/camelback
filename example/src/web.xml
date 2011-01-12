@@ -2,7 +2,7 @@
   <display-name>CouchDB SSO example</display-name>
   <servlet>
     <servlet-name>example</servlet-name>
-    <servlet-class>example.core</servlet-class>
+    <servlet-class>example.servlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>example</servlet-name>

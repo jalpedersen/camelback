@@ -1,6 +1,5 @@
 (ns example.core
-  (:gen-class :extends javax.servlet.http.HttpServlet)
-  (:use compojure.core [ring.util.servlet])
+  (:use compojure.core)
   (:use clojure.contrib.json))
 
 (defn- main-page [request]
@@ -15,10 +14,11 @@
 		       (.getName principal))})))
 
  
-(defroutes joiner-routes
+(defroutes example-routes
   (ANY "/example/user/*" request
        (secure-page (:servlet-request request)))
   (ANY "/*" request
        (main-page request)))
 
-(defservice joiner-routes)
+(def example-app
+     (-> #'example-routes))

@@ -6,3 +6,8 @@ logs
 etc
 camelback.err
 camelback.out
+*~
+leak
+*.jar
+classes
+*.war
