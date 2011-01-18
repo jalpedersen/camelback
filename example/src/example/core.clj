@@ -1,8 +1,10 @@
 (ns example.core
   (:use compojure.core)
-  (:use clojure.contrib.json))
+  (:use clojure.contrib.json)
+  (:require [clojure.contrib.logging :as log]))
 
 (defn- main-page [request]
+  (log/info "Hi there")
   (json-str {:status "ok"
 	     :request (str request)}))
 
