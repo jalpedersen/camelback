@@ -27,6 +27,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.signaut.camelback.start;
 
+import java.util.concurrent.ConcurrentMap;
+
 import javax.servlet.ServletContext;
 
 import org.eclipse.jetty.deploy.DeploymentManager;
@@ -80,10 +82,11 @@ class JettyInstance {
         
         final HazelcastInstance hazelcastInstance = hazelcastFactory.loadHazelcastInstance(config.getHazelcastConfig(), getClass()); 
         
+        final ConcurrentMap<String, String> activeUsers = hazelcastInstance.getMap("signaut.activeUsers");
         // Authentication
         final CouchDbLoginService couchDbLoginService = new CouchDbLoginService("couchdb_realm",
                 new CouchDbAuthenticatorImpl(config.getLoginConfig().getAuthenticationUrl()),
-                hazelcastInstance);
+                activeUsers);
                 
         server.addBean(couchDbLoginService);
         server.addBean(authenticatorFactory);
