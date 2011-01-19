@@ -2,6 +2,7 @@
   :description "Example web app using single-sign-on with couchdb"
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
+                 [log4j/log4j "1.2.16"]
 		 [compojure "0.5.3"]
 		 [ring/ring-core "0.3.5"]
 		 [ring/ring-servlet "0.3.5"]]
