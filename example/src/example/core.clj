@@ -4,9 +4,15 @@
   (:require [clojure.contrib.logging :as log]))
 
 (defn- main-page [request]
-  (log/info "Hi there")
-  (json-str {:status "ok"
-	     :request (str request)}))
+  (let [session (.getSession (:servlet-request request))
+        old-val (.getAttribute session "testing")]
+    (.setAttribute session "testing" (str "blah " (:query-string request)))
+    (log/info "Hi there")
+    (json-str {:status "ok"
+               :old-val old-val
+               :new-val (.getAttribute session "testing")
+               :session (str (.getSession (:servlet-request request) true))
+               :request (str request)})))
 
 (defn- secure-page [request]
   (let [principal (.getUserPrincipal request)]
@@ -15,7 +21,7 @@
 		       "anonymous"
 		       (.getName principal))})))
 
- 
+
 (defroutes example-routes
   (ANY "/example/user/*" request
        (secure-page (:servlet-request request)))
