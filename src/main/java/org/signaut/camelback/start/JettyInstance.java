@@ -53,8 +53,8 @@ import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.SessionManagerProvider;
 import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
-import org.signaut.jetty.server.session.ClusterSessionIdManager;
-import org.signaut.jetty.server.session.ClusterSessionManager;
+import org.signaut.jetty.server.session.HazelcastSessionIdManager;
+import org.signaut.jetty.server.session.HazelcastSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,14 +92,14 @@ class JettyInstance {
         server.addBean(authenticatorFactory);
         
         // Session manager
-        final ClusterSessionIdManager clusterSessionIdManager = 
-            new ClusterSessionIdManager(null,
+        final HazelcastSessionIdManager clusterSessionIdManager = 
+            new HazelcastSessionIdManager(null,
                                         hazelcastInstance);
         server.setSessionIdManager(clusterSessionIdManager);
         final SessionManagerProvider sessionManagerProvider = new SessionManagerProvider() {
             @Override
             public SessionManager get() {
-                return new ClusterSessionManager(clusterSessionIdManager);
+                return new HazelcastSessionManager(clusterSessionIdManager);
             }
         };
 
