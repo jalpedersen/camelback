@@ -148,7 +148,9 @@ class JettyInstance {
                 setPort(config.getPort());
                 setName("http");
                 setConfidentialPort(config.getSecurePort());
-                setThreadPool(new QueuedThreadPool(config.getThreadPoolSize()));
+                final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
+                threadPool.setName("http");
+                setThreadPool(threadPool);
             }
         });
 
@@ -160,7 +162,9 @@ class JettyInstance {
                     setConfidentialPort(config.getSecurePort());
                     setKeystore(config.getSslConfig().getKeystore());
                     setKeyPassword(config.getSslConfig().getKeystorePassword());
-                    setThreadPool(new QueuedThreadPool(config.getThreadPoolSize()));
+                    final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
+                    threadPool.setName("https");
+                    setThreadPool(threadPool);
                 }
             });
         }
