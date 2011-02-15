@@ -101,12 +101,12 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptors>
-            <descriptor>src/assembly/dist.xml</descriptor>
+            <descriptor>src/main/assembly/dist.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>
           <execution>
-            <phase>package</phase>
+            <phase>install</phase>
             <goals>
               <goal>attached</goal>
             </goals>

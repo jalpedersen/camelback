@@ -36,7 +36,7 @@ import org.signaut.camelback.configuration.CamelbackConfig;
 import org.signaut.camelback.configuration.ConfigurationLoader;
 
 public class Starter {
-
+    
     public static void main(String args[]) {
         final ConfigurationLoader configurationLoader = new ConfigurationLoader();
         //Tell hazelcast to use log4j
@@ -44,7 +44,7 @@ public class Starter {
         try {
             // Override default JUL properties (Jersey uses JUL for instance)
             LogManager.getLogManager()
-                    .readConfiguration(Starter.class.getResourceAsStream("/properties/camelback-logging.properties"));
+            .readConfiguration(Starter.class.getResourceAsStream("/properties/camelback-logging.properties"));
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -54,10 +54,10 @@ public class Starter {
         final CamelbackConfig config;
         if (options.hasOption(CommandLineOptions.CONFIG_OPTION)) {
             config = configurationLoader.loadJsonConfiguration(new File(options.getOptionValue(CommandLineOptions.CONFIG_OPTION)),
-                                                      CamelbackConfig.class);
+                                                               CamelbackConfig.class);
         } else {
-            config = configurationLoader.loadJsonConfiguration(new File("camelback.json"),
-                                                      CamelbackConfig.class);
+            config = configurationLoader.loadJsonConfiguration(new File("etc","camelback.json"),
+                                                               CamelbackConfig.class);
         }
         if (options.hasOption(CommandLineOptions.PORT_OPTION)) {
             config.setPort(Integer.parseInt(options.getOptionValue(CommandLineOptions.PORT_OPTION)));
@@ -67,7 +67,7 @@ public class Starter {
         }
         
         final JettyInstance jettyInstance = new JettyInstance(config);
-                
+        
         jettyInstance.start();
     }
 }

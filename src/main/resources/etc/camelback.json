@@ -7,8 +7,9 @@
   },
 
   sslConfig: {
-    keystore: "./etc/monty.jks",
+    keystore: null/*"./etc/monty.jks"*/,
     keystorePassword: "tobechanged"
   }
 
 }
+
