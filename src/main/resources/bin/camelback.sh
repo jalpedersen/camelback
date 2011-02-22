@@ -9,24 +9,36 @@ usage()
 ACTION=$1
 [ -z $ACTION ] && usage
 
-TMPDIR=${TMPDIR:-/tmp/camelback}
+#Pull in external configuration
+if [ -f /etc/camelback/init.rc ]; then
+  . /etc/camelback/init.rc
+fi
+if [ -f $HOME/.camelbackrc ]; then
+  . $HOME/.camelbackrc
+fi
+
+CB_TMPDIR=${CB_TMPDIR:-/tmp/camelback}
 CB_HOME=${CB_HOME:-`dirname $0`/..}
 CB_CONF=${CB_CONF:-$CB_HOME/etc/camelback.json}
-CB_PIDFILE=${CB_PIDFILE:-$TMPDIR/camelback.pid}
+CB_PIDFILE=${CB_PIDFILE:-$CB_TMPDIR/camelback.pid}
 
 if [ -z "$JAVA" ]
 then
   JAVA=`which java`
 fi
 
-JAVA_OPTIONS="$JAVA_OPTIONS -Djava.io.tmpdir=$TMPDIR"
+JAVA_OPTIONS="$JAVA_OPTIONS -Djava.io.tmpdir=$CB_TMPDIR"
 CMD="$JAVA -- $JAVA_OPTIONS -jar $CB_HOME/camelback.jar -c $CB_CONF"
-mkdir -p $TMPDIR 2> /dev/null
+mkdir -p $CB_TMPDIR 2> /dev/null
+
+if [ -n "$CB_USER" ]; then
+  START_OPTIONS="$START_OPTIONS -c $CB_USER"
+fi
 
 case "$ACTION" in
   start)
     echo -n "Starting Camelback: "
-    start-stop-daemon -S -b -m -p $CB_PIDFILE -d $CB_HOME -a $CMD 
+    start-stop-daemon $START_OPTIONS -S -b -m -p $CB_PIDFILE -d $CB_HOME -a $CMD 
     echo Ok
     ;;
 
