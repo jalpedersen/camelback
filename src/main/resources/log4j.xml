@@ -2,29 +2,29 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration>
     <appender name="all" class="org.apache.log4j.RollingFileAppender">
+    	<param name="file" value="logs/all.log"/>
+	    <param name="MaxFileSize" value="1024KB"/>
+		<param name="MaxBackupIndex" value="15"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} %d{ABSOLUTE} %5p %c |%t|:\n %m%n"/>
+        </layout>
+    </appender>
+    <appender name="camelback" class="org.apache.log4j.RollingFileAppender">
     	<param name="file" value="logs/camelback.log"/>
 	    <param name="MaxFileSize" value="1024KB"/>
 		<param name="MaxBackupIndex" value="15"/>
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c |%t|:\n %m%n"/>
-        </layout>
-    </appender>
-    <appender name="monty" class="org.apache.log4j.RollingFileAppender">
-    	<param name="file" value="logs/monty.log"/>
-	    <param name="MaxFileSize" value="1024KB"/>
-		<param name="MaxBackupIndex" value="15"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c |%t|:\n %m%n"/>
+            <param name="ConversionPattern" value="%d{DATE} %d{ABSOLUTE} %5p %c |%t|:\n %m%n"/>
         </layout>
     </appender>
         
     <logger name="org.signaut">
        <level value="debug"/> 
     </logger>
-     <root>
+    <root>
         <priority value="info">
         </priority>
-        <appender-ref ref="all"/>
+        <appender-ref ref="camelback"/>
     </root>
  
 </log4j:configuration>
