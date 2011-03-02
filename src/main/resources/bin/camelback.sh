@@ -1,5 +1,13 @@
 #!/bin/sh
-# Startup script for Camelback
+### BEGIN INIT INFO
+# Provides:          camelback
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Camelback
+# Description:       Camelback is a simple clusterable servlet-container.
+### END INIT INFO
 
 usage()
 {
