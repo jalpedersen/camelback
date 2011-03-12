@@ -1,14 +1,14 @@
 #!/bin/sh
-xulrunner_version=1.9.2.12
+xulrunner_version=1.9.2.15
 prefix=/opt/couchdb
 
 #dependencies
-apt-get install build-essential erlang xulrunner-dev libicu-dev help2man libcurl4-openssl-dev
+sudo apt-get install build-essential erlang xulrunner-dev libicu-dev help2man libcurl4-openssl-dev
 
 echo "/usr/lib/xulrunner-devel-$xulrunner_version/lib" > /etc/ld.so.conf.d/xulrunner.conf
 
 (\
-cd apache-couchdb-1.0.1 && \
+cd apache-couchdb-1.0.2 && \
 ./configure --prefix=$prefix --with-js-lib=/usr/lib/xulrunner-devel-$xulrunner_version/lib \
             --with-js-include=/usr/lib/xulrunner-devel-$xulrunner_version/include &&\
 make && \
