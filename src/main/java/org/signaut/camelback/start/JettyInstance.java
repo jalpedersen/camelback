@@ -63,11 +63,23 @@ import com.hazelcast.core.HazelcastInstance;
 class JettyInstance {
     private final CamelbackConfig config;
     private final Server server = new Server();;
-    private final HazelcastFactory hazelcastFactory = new HazelcastFactory();;
+    private final HazelcastFactory hazelcastFactory = new HazelcastFactory();
+    private final Authenticator.Factory authenticatorFactory;
+
     private final Logger log = LoggerFactory.getLogger(getClass());
     
     public JettyInstance(CamelbackConfig config) {
         this.config = config;
+        authenticatorFactory = new Factory() {
+            final CouchDbSSOAuthenticator authenticator =
+                new CouchDbSSOAuthenticator(new CouchDbAuthenticatorImpl(JettyInstance.this.config.getLoginConfig()
+                                                                         .getAuthenticationUrl()));
+            @Override
+            public Authenticator getAuthenticator(Server server, ServletContext context, AuthConfiguration configuration,
+                    IdentityService identityService, LoginService loginService) {
+                return authenticator;
+            }
+        };
     }
 
     public void start() {
@@ -124,15 +136,6 @@ class JettyInstance {
 
     }
 
-    private final Authenticator.Factory authenticatorFactory = new Factory() {
-
-        @Override
-        public Authenticator getAuthenticator(Server server, ServletContext context, AuthConfiguration configuration,
-                IdentityService identityService, LoginService loginService) {
-            return new CouchDbSSOAuthenticator(new CouchDbAuthenticatorImpl(config.getLoginConfig()
-                    .getAuthenticationUrl()));
-        }
-    };
 
     public void stop() {
         try {
