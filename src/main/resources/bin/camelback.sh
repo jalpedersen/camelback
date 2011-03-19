@@ -41,6 +41,7 @@ mkdir -p $CB_TMPDIR 2> /dev/null
 
 if [ -n "$CB_USER" ]; then
   START_OPTIONS="$START_OPTIONS -c $CB_USER"
+  chown -R $CB_USER $CB_TMPDIR
 fi
 
 case "$ACTION" in
