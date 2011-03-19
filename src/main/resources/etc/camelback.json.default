@@ -4,12 +4,12 @@
     username: "knownUser",
     password: "myPassword",
     filter: "messages/appfilter"
-  },
+  }/*,
 
   sslConfig: {
-    keystore: null/*"./etc/monty.jks"*/,
+    keystore: "./etc/monty.jks",
     keystorePassword: "tobechanged"
-  }
+  }*/
 
 }
 

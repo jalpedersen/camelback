@@ -71,6 +71,9 @@ public class CamelbackConfig {
     public static class SslConfig {
         private String keystore;
         private String keystorePassword;
+        private String keyManagerPassword;
+        private String truststore;
+        private String truststorePassword;
 
         public String getKeystore() {
             return keystore;
@@ -88,6 +91,29 @@ public class CamelbackConfig {
             this.keystorePassword = keystorePassword;
         }
 
+        public String getTruststore() {
+            return truststore!=null?truststore:keystore;
+        }
+
+        public void setTruststore(String truststore) {
+            this.truststore = truststore;
+        }
+
+        public String getTruststorePassword() {
+            return truststorePassword!=null?truststorePassword:keystorePassword;
+        }
+
+        public void setTruststorePassword(String truststorePassword) {
+            this.truststorePassword = truststorePassword;
+        }
+
+        public String getKeyManagerPassword() {
+            return keyManagerPassword!=null?keyManagerPassword:keystorePassword;
+        }
+
+        public void setKeyManagerPassword(String keyManagerPassword) {
+            this.keyManagerPassword = keyManagerPassword;
+        }
     }
 
     private String name = "Camelback";

@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.servlet.ServletContext;
 
 import org.eclipse.jetty.deploy.DeploymentManager;
+import org.eclipse.jetty.http.ssl.SslContextFactory;
 import org.eclipse.jetty.security.Authenticator;
 import org.eclipse.jetty.security.Authenticator.AuthConfiguration;
 import org.eclipse.jetty.security.Authenticator.Factory;
@@ -157,14 +158,28 @@ class JettyInstance {
             }
         });
 
-        if (config.getSslConfig() != null) {
+        if (config.getSslConfig() != null
+                && config.getSslConfig().getKeystore()!=null) {
             server.addConnector(new SslSelectChannelConnector() {
                 {
                     setPort(config.getSecurePort());
                     setName("https");
                     setConfidentialPort(config.getSecurePort());
-                    setKeystore(config.getSslConfig().getKeystore());
-                    setKeyPassword(config.getSslConfig().getKeystorePassword());
+                    final SslContextFactory sslContextFactory = getSslContextFactory();
+                    sslContextFactory.setKeyStore(config.getSslConfig().getKeystore());
+                    sslContextFactory.setKeyStorePassword(config.getSslConfig().getKeystorePassword());
+                    sslContextFactory.setKeyManagerPassword(config.getSslConfig().getKeyManagerPassword());
+                    sslContextFactory.setTrustStore(config.getSslConfig().getTruststore());
+                    sslContextFactory.setTrustStorePassword(config.getSslConfig().getTruststorePassword());
+                    sslContextFactory.setExcludeCipherSuites(new String[] {
+                            "SSL_RSA_WITH_DES_CBC_SHA",
+                            "SSL_DHE_RSA_WITH_DES_CBC_SHA",
+                            "SSL_DHE_DSS_WITH_DES_CBC_SHA",
+                            "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
+                            "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                            "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                            "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA"
+                    });
                     final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
                     threadPool.setName("https");
                     setThreadPool(threadPool);

@@ -6,7 +6,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>Camelback</name>
   <properties>
-    <jetty.version>7.3.0.v20110203</jetty.version>
+    <jetty.version>7.3.1.v20110307</jetty.version>
   </properties>
   <dependencies>
     <dependency>
@@ -32,6 +32,16 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-deploy</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-security</artifactId>
       <version>${jetty.version}</version>
     </dependency>
     <dependency>
@@ -85,6 +95,7 @@
         <version>2.1</version>
         <configuration>
           <includeScope>runtime</includeScope>
+          <excludeScope>test,compile</excludeScope>
           <outputDirectory>${project.build.directory}/lib</outputDirectory>
         </configuration>
         <executions>
