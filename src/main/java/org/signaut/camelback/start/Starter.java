@@ -40,7 +40,7 @@ public class Starter {
     public static void main(String args[]) {
         final ConfigurationLoader configurationLoader = new ConfigurationLoader();
         //Tell hazelcast to use log4j
-        System.setProperty("hazelcast.logging.type", "log4j");
+        System.setProperty("hazelcast.logging.type", "slf4j");
         try {
             // Override default JUL properties (Jersey uses JUL for instance)
             LogManager.getLogManager()
