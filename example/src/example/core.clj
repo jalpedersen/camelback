@@ -23,6 +23,7 @@
 
 
 (defroutes example-routes
+  (ANY "/example/ping" request "pong")
   (ANY "/example/user/*" request
        (secure-page (:servlet-request request)))
   (ANY "/*" request
