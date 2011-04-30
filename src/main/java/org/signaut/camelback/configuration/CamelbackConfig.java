@@ -124,7 +124,7 @@ public class CamelbackConfig {
     // Https port
     private int securePort = 8443;
 
-    private int threadPoolSize = 8;
+    private int threadPoolSize = 50;
 
     private String tempDirectory = "/tmp/";
 

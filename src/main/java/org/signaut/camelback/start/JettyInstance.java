@@ -127,6 +127,10 @@ class JettyInstance {
 
         server.setStopAtShutdown(true);
         server.setGracefulShutdown(5000);
+
+        final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
+        server.setThreadPool(threadPool);
+
         // Now start server
         try {
             server.start();
@@ -152,9 +156,6 @@ class JettyInstance {
                 setPort(config.getPort());
                 setName("http");
                 setConfidentialPort(config.getSecurePort());
-                final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
-                threadPool.setName("http");
-                setThreadPool(threadPool);
             }
         });
 
@@ -180,9 +181,6 @@ class JettyInstance {
                             "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
                             "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA"
                     });
-                    final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
-                    threadPool.setName("https");
-                    setThreadPool(threadPool);
                 }
             });
         }
