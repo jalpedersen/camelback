@@ -108,7 +108,7 @@ class JettyInstance {
         final HazelcastSessionIdManager clusterSessionIdManager = 
             new HazelcastSessionIdManager(null,
                                         hazelcastInstance);
-        server.setSessionIdManager(clusterSessionIdManager);
+
         final SessionManagerProvider sessionManagerProvider = new SessionManagerProvider() {
             @Override
             public SessionManager get() {
