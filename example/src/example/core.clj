@@ -1,7 +1,7 @@
 (ns example.core
-  (:use compojure.core)
-  (:use clojure.contrib.json)
-  (:require [clojure.contrib.logging :as log]))
+  (:use compojure.core clojure.contrib.json)
+  (:require [clojure.contrib.logging :as log]
+            [compojure.handler :as handler]))
 
 (defn- main-page [request]
   (let [session (.getSession (:servlet-request request))
@@ -10,6 +10,7 @@
     (log/info "Hi there")
     (json-str {:status "ok"
                :old-val old-val
+               :params (:params request)
                :new-val (.getAttribute session "testing")
                :session (str (.getSession (:servlet-request request) true))
                :request (str request)})))
@@ -30,4 +31,5 @@
        (main-page request)))
 
 (def example-app
-     (-> #'example-routes))
+  (-> #'example-routes
+      handler/api))
