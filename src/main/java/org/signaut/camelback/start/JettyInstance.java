@@ -47,11 +47,13 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.ThreadPool;
 import org.signaut.camelback.configuration.CamelbackConfig;
 import org.signaut.common.hazelcast.HazelcastFactory;
 import org.signaut.couchdb.impl.CouchDbAuthenticatorImpl;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.SessionManagerProvider;
+import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.ThreadPoolProvider;
 import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
 import org.signaut.jetty.server.session.HazelcastSessionIdManager;
@@ -106,8 +108,7 @@ class JettyInstance {
         
         // Session manager
         final HazelcastSessionIdManager clusterSessionIdManager = 
-            new HazelcastSessionIdManager(null,
-                                        hazelcastInstance);
+                new HazelcastSessionIdManager(hazelcastInstance);
 
         final SessionManagerProvider sessionManagerProvider = new SessionManagerProvider() {
             @Override
@@ -115,14 +116,20 @@ class JettyInstance {
                 return new HazelcastSessionManager(clusterSessionIdManager);
             }
         };
-
+        final ThreadPoolProvider threadPoolProvider = new ThreadPoolProvider() {
+            @Override
+            public ThreadPool get() {
+                return new QueuedThreadPool(config.getThreadPoolSize());
+            }
+        };
         // Deployment handling
         final DeploymentManager deploymentManager = new DeploymentManager();
         deploymentManager.setContexts(contextHandlers);
         server.addBean(deploymentManager);
-        deploymentManager.addAppProvider(new CouchDbAppProvider(config.getDeployerConfig(), 
-                                                                authenticatorFactory, 
-                                                                sessionManagerProvider));
+        deploymentManager.addAppProvider(new CouchDbAppProvider().setCouchDeployerProperties(config.getDeployerConfig())
+                                                                .setAuthenticatorFactory(authenticatorFactory)
+                                                                .setSessionManagerProvider(sessionManagerProvider)
+                                                                .setThreadPoolProvider(threadPoolProvider));
         
 
         server.setStopAtShutdown(true);
