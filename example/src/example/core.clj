@@ -1,5 +1,6 @@
 (ns example.core
-  (:use compojure.core clojure.contrib.json)
+  (:use compojure.core clojure.contrib.json
+        ring-userprincipal-middleware.core)
   (:require [clojure.contrib.logging :as log]
             [compojure.handler :as handler]))
 
@@ -32,4 +33,5 @@
 
 (def example-app
   (-> #'example-routes
+      (wrap-userprincipal)
       handler/api))
