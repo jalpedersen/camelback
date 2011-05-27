@@ -11,6 +11,6 @@
   :dev-dependencies [[swank-clojure "1.2.1"]
 		     [ring/ring-devel "0.3.8"]
   		     [uk.org.alienscience/leiningen-war "0.0.12"]
-                     [org.signaut/ring-jetty7-adapter "0.3.8.1"]]
+                     [org.signaut/ring-jetty7-adapter "0.3.8.2"]]
   :war {:name "example.war"}
   :aot [example.servlet])
