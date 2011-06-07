@@ -1,0 +1,5 @@
+{
+   "type": "webapp",
+   "war": "example.war",
+   "contextPath": "/example"
+}
