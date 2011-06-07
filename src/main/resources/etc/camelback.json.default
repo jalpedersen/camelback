@@ -1,9 +1,10 @@
 {
   deployerConfig: {
-    databaseUrl: "http://localhost:5984/messages/",
+    databaseUrl: "http://localhost:5984/webapps/",
     username: "knownUser",
     password: "myPassword",
-    filter: "messages/appfilter"
+    designDocument: "webapps",
+    filter: "webapps/appfilter"
   }/*,
 
   sslConfig: {
