@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 # To enable remote JMX, add something like this to your local configuration:
-# JAVA_OPTIONS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1119\
+# JAVA_OPTIONS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1099\
 #               -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
 usage()
 {
