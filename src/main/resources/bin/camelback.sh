@@ -9,6 +9,9 @@
 # Description:       Camelback is a simple clusterable servlet-container.
 ### END INIT INFO
 
+# To enable remote JMX, add something like this to your local configuration:
+# JAVA_OPTIONS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1119\
+#               -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
 usage()
 {
     echo "Usage: ${0} {start|stop|restart} "
@@ -67,11 +70,12 @@ case "$ACTION" in
     ;;
 
   check)
-    echo "TMPDIR:     $TMPDIR"
-    echo "CB_HOME:    $CB_HOME"
-    echo "CB_CONF:    $CB_CONF"
-    echo "CB_PIDFILE: $CB_PIDFILE"
-    echo "CB_USER:    $CB_USER"
+    echo "TMPDIR:       $TMPDIR"
+    echo "CB_HOME:      $CB_HOME"
+    echo "CB_CONF:      $CB_CONF"
+    echo "CB_PIDFILE:   $CB_PIDFILE"
+    echo "CB_USER:      $CB_USER"
+    echo "JAVA_OPTIONS: $JAVA_OPTIONS"
     ;;
   *)
     usage
