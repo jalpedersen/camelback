@@ -14,7 +14,7 @@
 #               -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
 usage()
 {
-    echo "Usage: ${0} {start|stop|restart} "
+    echo "Usage: ${0} {start|stop|restart|status|check} "
     exit 1
 }
 ACTION=$1
@@ -71,6 +71,21 @@ case "$ACTION" in
     $0 start
     ;;
 
+  status)
+    if [ -e $CB_PIDFILE ]; then
+      ps `cat $CB_PIDFILE` > /dev/null;
+      if [ $? -eq 0 ]; then
+        echo "Running";
+	exit 0;
+      else
+        echo "Stopped";
+	exit 1;
+      fi
+    else
+      echo "Stopped";
+      exit 1;
+    fi
+    ;;
   check)
     echo "TMPDIR:       $TMPDIR"
     echo "CB_HOME:      $CB_HOME"
