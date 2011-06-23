@@ -43,8 +43,10 @@ CMD="$JAVA -- $JAVA_OPTIONS -jar $CB_HOME/camelback.jar -c $CB_CONF"
 mkdir -p $CB_TMPDIR 2> /dev/null
 
 if [ -n "$CB_USER" ]; then
-  START_OPTIONS="$START_OPTIONS -c $CB_USER"
-  chown -R $CB_USER $CB_TMPDIR
+  if [ "$CB_USER" != "$USER" ]; then
+    START_OPTIONS="$START_OPTIONS -c $CB_USER"
+    chown -R $CB_USER $CB_TMPDIR
+  fi
 fi
 
 case "$ACTION" in
