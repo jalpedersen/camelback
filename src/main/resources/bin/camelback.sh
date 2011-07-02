@@ -45,7 +45,6 @@ mkdir -p $CB_TMPDIR 2> /dev/null
 if [ -n "$CB_USER" ]; then
   if [ "$CB_USER" != "`whoami`" ]; then
     START_OPTIONS="$START_OPTIONS -c $CB_USER"
-    chown -R $CB_USER $CB_TMPDIR
   fi
 fi
 
@@ -53,6 +52,11 @@ case "$ACTION" in
   start)
     echo -n " * Starting Camelback: "
     start-stop-daemon $START_OPTIONS -S -b -m -p $CB_PIDFILE -d $CB_HOME -a $CMD 
+    if [ -n "$CB_USER" ]; then
+      if [ "$CB_USER" != "`whoami`" ]; then
+        chown -R $CB_USER $CB_TMPDIR
+      fi
+    fi
     echo Ok
     ;;
 
