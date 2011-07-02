@@ -14,7 +14,7 @@
 #               -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
 usage()
 {
-    echo "Usage: ${0} {start|stop|restart|status|check} "
+    echo "Usage: ${0} {start|stop|restart|status|check|showlog} "
     exit 1
 }
 ACTION=$1
@@ -43,7 +43,7 @@ CMD="$JAVA -- $JAVA_OPTIONS -jar $CB_HOME/camelback.jar -c $CB_CONF"
 mkdir -p $CB_TMPDIR 2> /dev/null
 
 if [ -n "$CB_USER" ]; then
-  if [ "$CB_USER" != "$USER" ]; then
+  if [ "$CB_USER" != "`whoami`" ]; then
     START_OPTIONS="$START_OPTIONS -c $CB_USER"
     chown -R $CB_USER $CB_TMPDIR
   fi
@@ -51,13 +51,13 @@ fi
 
 case "$ACTION" in
   start)
-    echo -n "Starting Camelback: "
+    echo -n " * Starting Camelback: "
     start-stop-daemon $START_OPTIONS -S -b -m -p $CB_PIDFILE -d $CB_HOME -a $CMD 
     echo Ok
     ;;
 
   stop)
-    echo -n "Stopping Camelback: "
+    echo -n " * Stopping Camelback: "
     start-stop-daemon -K --retry 10 -p $CB_PIDFILE  
     if [ $? = 1 ]; then
       echo "Failed"
@@ -71,18 +71,22 @@ case "$ACTION" in
     $0 start
     ;;
 
+  showlog)
+    tail -n 200 -F $CB_HOME/logs/camelback.log
+    ;;
+
   status)
     if [ -e $CB_PIDFILE ]; then
       ps `cat $CB_PIDFILE` > /dev/null;
       if [ $? -eq 0 ]; then
-        echo "Running";
+        echo " * Camelback is running";
 	exit 0;
       else
-        echo "Stopped";
+        echo " * Camelback is stopped";
 	exit 1;
       fi
     else
-      echo "Stopped";
+      echo " * Camelback is stopped";
       exit 1;
     fi
     ;;
