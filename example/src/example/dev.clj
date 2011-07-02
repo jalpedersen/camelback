@@ -1,12 +1,12 @@
 (ns example.dev
   (:use ring.adapter.jetty7
         ring.middleware.reload
-        ring-userprincipal-middleware.dev
+        ring.middleware.servlet-ext.dev
         example.core))
 
 
 (def dev-app
-     (-> example-routes
+     (-> example-app
 	 (wrap-with-fake-user "monty" #{"user admin"})
 	 (wrap-reload '[example.core])))
 

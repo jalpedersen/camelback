@@ -1,6 +1,6 @@
 (ns example.core
   (:use compojure.core clojure.contrib.json
-        ring-userprincipal-middleware.core)
+        ring.middleware.servlet-ext)
   (:require [clojure.contrib.logging :as log]
             [compojure.handler :as handler]))
 
@@ -8,7 +8,7 @@
   (let [session (.getSession (:servlet-request request))
         old-val (.getAttribute session "testing")]
     (.setAttribute session "testing" (str "blah " (:query-string request)))
-    (log/info "Hi there")
+    (log/info (str "Hi there from " (:remote-addr request)))
     (json-str {:status "ok"
                :old-val old-val
                :params (:params request)
