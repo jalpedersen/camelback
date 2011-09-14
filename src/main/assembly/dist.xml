@@ -11,18 +11,22 @@
       <destName>camelback.jar</destName>
       <fileMode>644</fileMode>
     </file>
-    <file>
-      <source>${basedir}/LICENSE</source>
-      <outputDirectory>licenses</outputDirectory>
-      <destName>LICENSE</destName>
-      <fileMode>644</fileMode>
-    </file>
   </files>
   <fileSets>
     <fileSet>
+      <directory>${basedir}</directory>
+      <outputDirectory>/licences</outputDirectory>
+      <directoryMode>755</directoryMode>
+      <fileMode>644</fileMode>
+      <includes>
+        <include>LICENCE</include>
+      </includes>
+    </fileSet>
+    <fileSet>
       <directory>${basedir}/${project.build.directory}/lib</directory>
       <outputDirectory>/lib</outputDirectory>
-      <fileMode>755</fileMode>
+      <directoryMode>755</directoryMode>
+      <fileMode>644</fileMode>
       <includes>
         <include>*.jar</include>
       </includes>
@@ -30,18 +34,14 @@
     <fileSet>
       <directory>${basedir}/src/main/resources/bin</directory>
       <outputDirectory>/bin</outputDirectory>
+      <directoryMode>755</directoryMode>
       <fileMode>755</fileMode>
-      <includes>
-        <include>*</include>
-      </includes>
     </fileSet>
     <fileSet>
       <directory>${basedir}/src/main/resources/etc</directory>
       <outputDirectory>/etc</outputDirectory>
-      <fileMode>755</fileMode>
-      <includes>
-        <include>*</include>
-      </includes>
+      <fileMode>644</fileMode>
+      <directoryMode>755</directoryMode>
     </fileSet>
   </fileSets>
 </assembly>
