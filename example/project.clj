@@ -6,7 +6,7 @@
                  [org.slf4j/log4j-over-slf4j "1.6.1"]
                  [ch.qos.logback/logback-classic "0.9.28"]
 		 [compojure "0.6.5"]
-                 [org.signaut/ring.middleware.servlet-ext "0.3"]
+                 [org.signaut/ring.middleware.servlet-ext "0.4"]
 		 [ring/ring-core "1.0.0-beta2"]
 		 [ring/ring-servlet "1.0.0-beta2"]]
   :dev-dependencies [[swank-clojure "1.2.1"]

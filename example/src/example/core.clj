@@ -1,7 +1,7 @@
 (ns example.core
-  (:use compojure.core data.json
+  (:use compojure.core clojure.data.json
         ring.middleware.servlet-ext)
-  (:require [tools.logging :as log]
+  (:require [clojure.tools.logging :as log]
             [compojure.handler :as handler]))
 
 (defn- main-page [request]
