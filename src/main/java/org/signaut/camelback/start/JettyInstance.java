@@ -174,7 +174,7 @@ class JettyInstance {
                     setName("https");
                     setConfidentialPort(config.getSecurePort());
                     final SslContextFactory sslContextFactory = getSslContextFactory();
-                    sslContextFactory.setKeyStore(config.getSslConfig().getKeystore());
+                    sslContextFactory.setKeyStorePath(config.getSslConfig().getKeystore());
                     sslContextFactory.setKeyStorePassword(config.getSslConfig().getKeystorePassword());
                     sslContextFactory.setKeyManagerPassword(config.getSslConfig().getKeyManagerPassword());
                     sslContextFactory.setTrustStore(config.getSslConfig().getTruststore());
