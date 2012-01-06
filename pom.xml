@@ -3,31 +3,31 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.signaut</groupId>
   <artifactId>camelback</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <name>Camelback</name>
   <properties>
-    <jetty.version>7.5.4.v20111024</jetty.version>
+    <jetty.version>7.6.0.RC3</jetty.version>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.signaut</groupId>
       <artifactId>jetty-hazelcast</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
     </dependency>
     <dependency>
       <groupId>org.signaut</groupId>
       <artifactId>jetty-couchdb</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.6.1</version>
+      <version>1.6.4</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>0.9.29</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -60,7 +60,8 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
-      </plugin>
+    </plugin>
+    <!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>properties-maven-plugin</artifactId>
@@ -79,6 +80,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>

@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.servlet.ServletContext;
 
 import org.eclipse.jetty.deploy.DeploymentManager;
-import org.eclipse.jetty.http.ssl.SslContextFactory;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.security.Authenticator;
 import org.eclipse.jetty.security.Authenticator.AuthConfiguration;
 import org.eclipse.jetty.security.Authenticator.Factory;
