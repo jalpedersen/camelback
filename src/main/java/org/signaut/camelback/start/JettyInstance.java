@@ -128,6 +128,7 @@ class JettyInstance {
         server.addBean(deploymentManager);
         deploymentManager.addAppProvider(new CouchDbAppProvider().setCouchDeployerProperties(config.getDeployerConfig())
                                                                 .setAuthenticatorFactory(authenticatorFactory)
+                                                                .setLoginService(couchDbLoginService)
                                                                 .setSessionManagerProvider(sessionManagerProvider)
                                                                 .setThreadPoolProvider(threadPoolProvider));
         
