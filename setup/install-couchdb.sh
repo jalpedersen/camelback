@@ -1,5 +1,5 @@
 #!/bin/sh
-xulrunner_version=1.9.2.24
+xulrunner_version=1.9.2.27
 couchdb_version=1.1.1
 prefix=/opt/couchdb
 
@@ -9,13 +9,13 @@ sudo apt-get install build-essential erlang xulrunner-dev libicu-dev help2man li
 
 (\
 cd apache-couchdb-$couchdb_version && \
-./configure --prefix=$prefix --with-js-lib=/usr/lib/xulrunner-devel-$xulrunner_version/lib \
+./configure --prefix=$prefix --with-js-lib=/usr/lib/xulrunner-$xulrunner_version/ \
             --with-js-include=/usr/lib/xulrunner-devel-$xulrunner_version/include &&\
 make && \
 sudo make install \
 ) &&\
 
-sudo su -c "echo \"/usr/lib/xulrunner-devel-$xulrunner_version/lib\" > /etc/ld.so.conf.d/xulrunner.conf"
+sudo su -c "echo \"/usr/lib/xulrunner-$xulrunner_version/\" > /etc/ld.so.conf.d/xulrunner.conf"
 
 
 # Add couchdb user account
