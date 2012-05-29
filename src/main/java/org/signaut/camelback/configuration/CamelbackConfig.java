@@ -27,8 +27,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.signaut.camelback.configuration;
 
-import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbDeployerProperties;
+
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 public class CamelbackConfig {
     

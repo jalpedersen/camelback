@@ -31,9 +31,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConfigurationLoader {
     private final ObjectMapper objectMapper = new ObjectMapper(new JsonFactory()
