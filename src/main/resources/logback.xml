@@ -3,13 +3,14 @@
 	
     <!--Daily rolling file appender -->
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>./logs/camelback.log</File>
+		<file>./logs/camelback.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<FileNamePattern>./logs/camelback.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
 		</rollingPolicy>
-		<layout class="ch.qos.logback.classic.PatternLayout">
+		<encoder>
 			<Pattern>%d{dd.MM.yy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-		</layout>
+		</encoder>
 	</appender>
 	
 	<logger name="org.signaut">
