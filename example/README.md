@@ -36,7 +36,7 @@ Deploying example webapp:
  - Start Camelback (java -jar camelback-1.0-SNAPSHOT.jar)
 
  - Build war-file:
-   ./build-war.sh
+    lein ring uberwar
 
  - Save document in database configured in camelback.json configuration file
 

@@ -4,4 +4,4 @@
 # Get couch-joiner from: https://github.com/jalpersen/couch-joiner
 joiner_jar=../../couch-joiner/couch-joiner.jar
 
-java -jar $joiner_jar -m update -db webapps -id example -f example.war
+java -jar $joiner_jar -m update -db webapps -id example -f target/example.war

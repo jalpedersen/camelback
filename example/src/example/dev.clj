@@ -1,5 +1,5 @@
 (ns example.dev
-  (:use ring.adapter.jetty7
+  (:use ring.adapter.jetty8
         ring.middleware.reload
         ring.middleware.servlet-ext.dev
         example.core))
