@@ -51,7 +51,7 @@ fi
 case "$ACTION" in
   start)
     echo -n " * Starting Camelback: "
-    start-stop-daemon $START_OPTIONS -S -b -m -p $CB_PIDFILE -d $CB_HOME -a $CMD 
+    /sbin/start-stop-daemon $START_OPTIONS -S -b -m -p $CB_PIDFILE -d $CB_HOME -a $CMD 
     if [ -n "$CB_USER" ]; then
       if [ "$CB_USER" != "`whoami`" ]; then
         chown -R $CB_USER $CB_TMPDIR
@@ -62,7 +62,7 @@ case "$ACTION" in
 
   stop)
     echo -n " * Stopping Camelback: "
-    start-stop-daemon -K --retry 10 -p $CB_PIDFILE  
+    /sbin/start-stop-daemon -K --retry 10 -p $CB_PIDFILE  
     if [ $? = 1 ]; then
       echo "Failed"
     else
