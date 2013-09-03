@@ -3,31 +3,31 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.signaut</groupId>
   <artifactId>camelback</artifactId>
-  <version>1.4.4</version>
+  <version>1.5.0</version>
   <name>Camelback</name>
   <properties>
-    <jetty.version>8.1.8.v20121106</jetty.version>
+    <jetty.version>9.0.5.v20130815</jetty.version>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.signaut</groupId>
       <artifactId>jetty-hazelcast</artifactId>
-      <version>1.4.4</version>
+      <version>1.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.signaut</groupId>
       <artifactId>jetty-couchdb</artifactId>
-      <version>1.4.4</version>
+      <version>1.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.6.4</version>
+      <version>1.7.5</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.13</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>

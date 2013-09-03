@@ -39,21 +39,22 @@ import org.eclipse.jetty.security.Authenticator.Factory;
 import org.eclipse.jetty.security.IdentityService;
 import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SessionManager;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.util.thread.ThreadPool;
 import org.signaut.camelback.configuration.CamelbackConfig;
 import org.signaut.common.hazelcast.HazelcastFactory;
 import org.signaut.couchdb.impl.CouchDbAuthenticatorImpl;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider;
 import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.SessionManagerProvider;
-import org.signaut.jetty.deploy.providers.couchdb.CouchDbAppProvider.ThreadPoolProvider;
 import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
 import org.signaut.jetty.server.session.HazelcastSessionIdManager;
@@ -65,7 +66,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 class JettyInstance {
     private final CamelbackConfig config;
-    private final Server server = new Server();;
+    private final Server server ;
     private final HazelcastFactory hazelcastFactory = new HazelcastFactory();
     private final Authenticator.Factory authenticatorFactory;
 
@@ -73,6 +74,8 @@ class JettyInstance {
     
     public JettyInstance(CamelbackConfig config) {
         this.config = config;
+        final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
+        this.server = new Server(threadPool);
         authenticatorFactory = new Factory() {
             final CouchDbSSOAuthenticator authenticator =
                 new CouchDbSSOAuthenticator(new CouchDbAuthenticatorImpl(JettyInstance.this.config.getLoginConfig()
@@ -108,7 +111,7 @@ class JettyInstance {
         
         // Session manager
         final HazelcastSessionIdManager clusterSessionIdManager = 
-                new HazelcastSessionIdManager(hazelcastInstance);
+                new HazelcastSessionIdManager(server, hazelcastInstance);
 
         final SessionManagerProvider sessionManagerProvider = new SessionManagerProvider() {
             @Override
@@ -116,12 +119,7 @@ class JettyInstance {
                 return new HazelcastSessionManager(clusterSessionIdManager);
             }
         };
-        final ThreadPoolProvider threadPoolProvider = new ThreadPoolProvider() {
-            @Override
-            public ThreadPool get() {
-                return new QueuedThreadPool(config.getThreadPoolSize());
-            }
-        };
+       
         // Deployment handling
         final DeploymentManager deploymentManager = new DeploymentManager();
         deploymentManager.setContexts(contextHandlers);
@@ -129,15 +127,12 @@ class JettyInstance {
         deploymentManager.addAppProvider(new CouchDbAppProvider().setCouchDeployerProperties(config.getDeployerConfig())
                                                                 .setAuthenticatorFactory(authenticatorFactory)
                                                                 .setLoginService(couchDbLoginService)
-                                                                .setSessionManagerProvider(sessionManagerProvider)
-                                                                .setThreadPoolProvider(threadPoolProvider));
+                                                                .setSessionManagerProvider(sessionManagerProvider));
+
         
 
         server.setStopAtShutdown(true);
-        server.setGracefulShutdown(5000);
 
-        final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
-        server.setThreadPool(threadPool);
 
         // Now start server
         try {
@@ -159,38 +154,39 @@ class JettyInstance {
     }
 
     private void setConnectors(Server server) {
-        server.addConnector(new SelectChannelConnector() {
-            {
-                setPort(config.getPort());
-                setName("http");
-                setConfidentialPort(config.getSecurePort());
-            }
-        });
+    	final HttpConfiguration httpConfig = new HttpConfiguration();
+    	httpConfig.setSecureScheme("https");
+    	httpConfig.setSecurePort(config.getSecurePort());
+    	final ServerConnector httpConnector = new ServerConnector(server, new HttpConnectionFactory(httpConfig));
+    	httpConnector.setPort(config.getPort());
+    	httpConnector.setName("http");
+        server.addConnector(httpConnector);
 
         if (config.getSslConfig() != null
                 && config.getSslConfig().getKeystore()!=null) {
-            server.addConnector(new SslSelectChannelConnector() {
-                {
-                    setPort(config.getSecurePort());
-                    setName("https");
-                    setConfidentialPort(config.getSecurePort());
-                    final SslContextFactory sslContextFactory = getSslContextFactory();
-                    sslContextFactory.setKeyStorePath(config.getSslConfig().getKeystore());
-                    sslContextFactory.setKeyStorePassword(config.getSslConfig().getKeystorePassword());
-                    sslContextFactory.setKeyManagerPassword(config.getSslConfig().getKeyManagerPassword());
-                    sslContextFactory.setTrustStore(config.getSslConfig().getTruststore());
-                    sslContextFactory.setTrustStorePassword(config.getSslConfig().getTruststorePassword());
-                    sslContextFactory.setExcludeCipherSuites(new String[] {
-                            "SSL_RSA_WITH_DES_CBC_SHA",
-                            "SSL_DHE_RSA_WITH_DES_CBC_SHA",
-                            "SSL_DHE_DSS_WITH_DES_CBC_SHA",
-                            "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
-                            "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
-                            "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
-                            "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA"
-                    });
-                }
+            final HttpConfiguration httpsConfig = new HttpConfiguration(httpConfig);
+            httpsConfig.addCustomizer(new SecureRequestCustomizer());
+            final SslContextFactory sslContextFactory = new SslContextFactory();
+            sslContextFactory.setKeyStorePath(config.getSslConfig().getKeystore());
+            sslContextFactory.setKeyStorePassword(config.getSslConfig().getKeystorePassword());
+            sslContextFactory.setKeyManagerPassword(config.getSslConfig().getKeyManagerPassword());
+            sslContextFactory.setTrustStorePath(config.getSslConfig().getTruststore());
+            sslContextFactory.setTrustStorePassword(config.getSslConfig().getTruststorePassword());
+            sslContextFactory.setExcludeCipherSuites(new String[] {
+                    "SSL_RSA_WITH_DES_CBC_SHA",
+                    "SSL_DHE_RSA_WITH_DES_CBC_SHA",
+                    "SSL_DHE_DSS_WITH_DES_CBC_SHA",
+                    "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
+                    "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                    "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                    "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA"
             });
+            final ServerConnector httpsConnector = new ServerConnector(server,
+                new SslConnectionFactory(sslContextFactory,"http/1.1"),
+                new HttpConnectionFactory(httpsConfig));
+            httpsConnector.setPort(config.getSecurePort());
+            httpsConnector.setName("https");
+        	server.addConnector(httpsConnector);
         }
 
     }
