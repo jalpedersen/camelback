@@ -74,7 +74,8 @@ class JettyInstance {
     
     public JettyInstance(CamelbackConfig config) {
         this.config = config;
-        final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize());
+        //Keep the minimum threadcount low so we can get rid of old threads (with potential thread local values).
+        final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize(), 1);
         this.server = new Server(threadPool);
         authenticatorFactory = new Factory() {
             final CouchDbSSOAuthenticator authenticator =
