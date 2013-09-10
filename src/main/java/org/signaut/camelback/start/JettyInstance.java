@@ -32,7 +32,6 @@ import java.util.concurrent.ConcurrentMap;
 import javax.servlet.ServletContext;
 
 import org.eclipse.jetty.deploy.DeploymentManager;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.security.Authenticator;
 import org.eclipse.jetty.security.Authenticator.AuthConfiguration;
 import org.eclipse.jetty.security.Authenticator.Factory;
@@ -49,7 +48,7 @@ import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.signaut.camelback.configuration.CamelbackConfig;
 import org.signaut.common.hazelcast.HazelcastFactory;
 import org.signaut.couchdb.impl.CouchDbAuthenticatorImpl;
@@ -59,6 +58,7 @@ import org.signaut.jetty.server.security.CouchDbLoginService;
 import org.signaut.jetty.server.security.authentication.CouchDbSSOAuthenticator;
 import org.signaut.jetty.server.session.HazelcastSessionIdManager;
 import org.signaut.jetty.server.session.HazelcastSessionManager;
+import org.signaut.util.thread.ReplaceableThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,8 +74,7 @@ class JettyInstance {
     
     public JettyInstance(CamelbackConfig config) {
         this.config = config;
-        //Keep the minimum threadcount low so we can get rid of old threads (with potential thread local values).
-        final QueuedThreadPool threadPool = new QueuedThreadPool(config.getThreadPoolSize(), 1);
+        final ReplaceableThreadPool threadPool = new ReplaceableThreadPool(config.getThreadPoolSize());
         this.server = new Server(threadPool);
         authenticatorFactory = new Factory() {
             final CouchDbSSOAuthenticator authenticator =
