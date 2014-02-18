@@ -1,27 +1,38 @@
 #!/bin/sh
 #This will compile and install couchdb on an Ubuntu based system
 xulrunner_version=1.9.2.28
-couchdb_version=1.2.0
+couchdb_version=1.5.0
 prefix=/opt/couchdb
 
 ubuntu_release=`lsb_release -sc`
+archive=apache-couchdb-$couchdb_version
 
 die() {
     echo $1
     exit 1
 }
+if [ ! -f $archive.tar.gz ]; then
+  wget http://mirrors.dotsrc.org/apache/couchdb/source/${couchdb_version}/apache-couchdb-${couchdb_version}.tar.gz
+fi
+
+if [ ! -d $archive ]; then
+  tar zxvf $archive.tar.gz
+fi
+
 cd apache-couchdb-$couchdb_version || die "Cannot find couchdb $couchdb_version"
 
 #dependencies
-sudo apt-get install build-essential erlang libicu-dev help2man libcurl4-openssl-dev
+sudo apt-get install -y build-essential erlang libicu-dev help2man libcurl4-openssl-dev
+
+
 if [ "$ubuntu_release" != "precise" ]; then
-    sudo apt-get install build-essential erlang xulrunner-dev libicu-dev help2man libcurl4-openssl-dev
+    sudo apt-get install -y build-essential erlang xulrunner-dev libicu-dev help2man libcurl4-openssl-dev
     ./configure --prefix=$prefix --with-js-lib=/usr/lib/xulrunner-$xulrunner_version/ \
         --with-js-include=/usr/lib/xulrunner-devel-$xulrunner_version/include || die "Failed to configure couchdb"
     sudo su -c "echo \"/usr/lib/xulrunner-$xulrunner_version/\" > /etc/ld.so.conf.d/xulrunner.conf" || die "Failed to add xulrunner to ld.so.conf.d"
 
 else
-    sudo apt-get install libmozjs185-dev
+    sudo apt-get install -y libmozjs185-dev
     ./configure --prefix=$prefix || die "Failed to configure couchdb"
 fi
 
